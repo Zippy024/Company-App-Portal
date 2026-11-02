@@ -31,7 +31,7 @@ h2{margin:0;font-size:24px;display:flex;align-items:center;gap:13px}
 .list{display:flex;flex-direction:column;gap:9px}.entry{border:1px solid #cddff7;border-radius:13px;background:linear-gradient(90deg,#f3f8ff,#f9fbff);padding:12px 18px;display:flex;align-items:center;gap:22px;min-height:77px}
 .num{background:#deedff;min-width:56px;height:47px;display:grid;place-items:center;border-radius:10px;font-weight:800;font-size:20px;color:#124c9d;font-variant-numeric:tabular-nums}
 .entry-copy{border-left:2px solid #a4c4ed;padding-left:22px;min-width:0;flex:1}.entry-title{font-size:18px;font-weight:750;line-height:1.3}.entry-description{font-size:14px;margin-top:3px;color:#344d71}
-.open{flex:none;background:#0564bd;border:0;border-radius:10px;color:#fff;font-size:15px;font-weight:700;min-height:44px;min-width:132px;cursor:pointer;display:inline-flex;justify-content:center;align-items:center;gap:10px;box-shadow:0 3px 9px #0064b31a}
+.open{text-decoration:none;flex:none;background:#0564bd;border:0;border-radius:10px;color:#fff;font-size:15px;font-weight:700;min-height:44px;min-width:132px;cursor:pointer;display:inline-flex;justify-content:center;align-items:center;gap:10px;box-shadow:0 3px 9px #0064b31a}
 .open:hover{background:#084f9a}.open:focus-visible{outline:3px solid #75b6ff;outline-offset:2px}.open svg{width:17px;height:17px}
 .empty{padding:35px 15px;text-align:center;color:#61718b}.notice{flex:none;display:flex;align-items:center;gap:12px;margin-top:18px;padding:14px 18px;background:#f0f6ff;border-radius:13px;color:#233d6f;font-size:13px}.notice strong{color:#123a85}.notice .info{font-size:21px;font-weight:bold;color:#125fb4}.updated{margin-left:auto;white-space:nowrap;color:#486283}
 .feedback{color:#a94327;font-size:13px;min-height:0;line-height:1.35}.feedback:not(:empty){margin-top:8px}
@@ -64,10 +64,10 @@ h2{margin:0;font-size:24px;display:flex;align-items:center;gap:13px}
   { name:'New Program', description:'Short description', url:'https://example.com' },
 ========================================================== */
 const APPS = [
-  { name:'TOFAS Test HR Version',       description:'Practice / HR Test / Official Test', url:'https://iida.appsmith.com/app/tofas/page1-6ab63d0d390253f7b72902f5?embed=true' },
-  { name:'Kanji Level 3',   description:'Check Answers & Details',            url:'https://forms.cloud.microsoft/r/uM1b3yxXek' },
-  { name:'Driver Attendance',        description:'Daily In/Out & OT Approval',         url:'' },
-  { name:'PIT Management',           description:'Payroll PIT & WHT Calculation',      url:'' }
+  { name:'TOFAS Test HR Version', description:'Practice / HR Test / Official Test', url:'https://iida.appsmith.com/app/tofas/page1-6ab63d0d390253f7b72902f5?embed=true' },
+  { name:'Kanji Level 3', description:'Kanji Level 3 Assessment', url:'https://forms.cloud.microsoft/r/uM1b3yxXek' },
+  { name:'Driver Attendance', description:'Daily In/Out & OT Approval', url:'' },
+  { name:'PIT Management', description:'Payroll PIT & WHT Calculation', url:'' }
 ];
 
 const list = document.getElementById('appList');
@@ -79,25 +79,15 @@ function validUrl(raw){
   try{const parsed = new URL(raw.trim());return parsed.protocol === 'https:' ? parsed.href : null;}catch{return null;}
 }
 function openApp(app){
-  const url=validUrl(app.url);
-  if(!url){feedback.textContent=`${app.name}: Link has not been added yet. Please contact the portal administrator.`;return;}
-  feedback.textContent='';
-
-function openApp(app){
   const url = validUrl(app.url);
-
   if (!url) {
-    feedback.textContent =
-      `${app.name}: Link has not been added yet. Please contact the portal administrator.`;
+    feedback.textContent = `${app.name}: Link has not been added yet. Please contact the portal administrator.`;
     return;
   }
-
   feedback.textContent = '';
-
-  // Open in a new browser tab.
+  // Called directly from the Open button click; leaves Portal tab unchanged.
   window.open(url, '_blank', 'noopener,noreferrer');
 }
-
 function render(){
   feedback.textContent='';
   const term=search.value.trim().toLowerCase();
@@ -112,9 +102,9 @@ function render(){
     const title=document.createElement('div');title.className='entry-title';title.textContent=app.name;
     const description=document.createElement('div');description.className='entry-description';description.textContent=app.description||'';
     details.append(title,description);
-    const button=document.createElement('button');button.className='open';button.type='button';button.setAttribute('aria-label',`Open ${app.name}`);
+    const button=document.createElement('a');button.className='open';button.href=validUrl(app.url)||'#';button.target='_blank';button.rel='noopener noreferrer';button.setAttribute('aria-label',`Open ${app.name} in a new tab`);
     button.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 5h6v6"/><path d="M19 5 10 14"/><path d="M19 13v6H5V5h6"/></svg><span>Open</span>';
-    button.addEventListener('click',()=>openApp(app));
+    button.addEventListener('click',(event)=>{if(!validUrl(app.url)){event.preventDefault();openApp(app);}else{feedback.textContent='';}});
     row.append(number,details,button);list.append(row);
   });
   if(count===0){const none=document.createElement('div');none.className='empty';none.textContent='No matching applications found.';list.append(none);}
