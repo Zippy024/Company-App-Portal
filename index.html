@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Company Application Portal</title>
+<style>
+:root{font-family:Segoe UI,Arial,sans-serif;color:#193947;background:#eef5fb}*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px}.shell{width:min(760px,100%);background:white;border:1px solid #dbe7f0;border-radius:20px;box-shadow:0 14px 45px #123b5814;overflow:hidden}.head{background:linear-gradient(115deg,#18599d,#3699b4);color:#fff;padding:28px 32px}.eyebrow{letter-spacing:.12em;font-weight:700;font-size:11px;opacity:.9}h1{margin:7px 0;font-size:28px}.head p{margin:0;color:#e4f5ff}.content{padding:28px 32px}.lead{font-weight:650;margin:0 0 12px}form{display:flex;gap:10px}input{flex:1;min-width:0;border:1px solid #c5d5e1;border-radius:10px;padding:15px;font-size:22px;letter-spacing:.13em}button{border:0;background:#216eb1;color:white;padding:0 26px;border-radius:10px;font-weight:700;cursor:pointer}button:hover{background:#14598e}.message{min-height:45px;padding:13px 0;color:#496474;font-size:13px}.list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.app{display:flex;gap:12px;align-items:center;padding:13px;border:1px solid #dfebf2;border-radius:10px;background:#f8fbfe}.code{font-weight:800;background:#e6f1fb;color:#1b619b;border-radius:7px;padding:9px 10px;font-variant-numeric:tabular-nums}.name{font-size:13px;font-weight:650}.note{font-size:12px;color:#698090;margin-top:18px}@media(max-width:550px){.content,.head{padding:22px}.list{grid-template-columns:1fr}h1{font-size:23px}button{padding:0 18px}}
+</style>
+</head>
+<body>
+<main class="shell">
+<header class="head"><div class="eyebrow">COMPANY INTERNAL APPLICATION DIRECTORY</div><h1>Application Portal</h1><p>Enter your application code to open a program</p></header>
+<section class="content"><p class="lead">Application Code</p><form id="goForm"><input id="codeInput" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="8" autocomplete="off" placeholder="e.g. 1001" required autofocus><button type="submit">Open</button></form><div class="message" id="message" role="status" aria-live="polite">Select a code from the directory below.</div><div class="list" id="appList"></div><p class="note">This is a portal prototype. Replace each blank URL in the APPS array with the real published app link before deploying. A public portal does not itself restrict access to HR systems.</p></section>
+</main>
+<script>
+// SETUP: Paste real published URLs into the url fields below.
+// Do not store passwords, tokens, or secret employee data in this file.
+const APPS = [
+  {code:'1001', name:'TOFAS Test Program', url:''},
+  {code:'1002', name:'TOFAS HR Answer Review', url:''},
+  {code:'1003', name:'Driver Attendance', url:''},
+  {code:'1004', name:'PIT Management', url:''}
+];
+const input=document.getElementById('codeInput');
+const msg=document.getElementById('message');
+const list=document.getElementById('appList');
+APPS.forEach(a=>{const el=document.createElement('div');el.className='app';const code=document.createElement('span');code.className='code';code.textContent=a.code;const name=document.createElement('span');name.className='name';name.textContent=a.name;el.append(code,name);list.append(el);});
+document.getElementById('goForm').addEventListener('submit',e=>{
+ e.preventDefault();const code=input.value.trim();const app=APPS.find(a=>a.code===code);
+ if(!app){msg.textContent='Application code not found. Please check the code.';return;}
+ if(!/^https:\/\//i.test(app.url)){msg.textContent=app.name+' is not configured yet. Ask your administrator to add its published URL.';return;}
+ const url=new URL(app.url);window.location.assign(url.href);
+});
+</script>
+</body>
+</html>
