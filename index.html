@@ -82,9 +82,22 @@ function openApp(app){
   const url=validUrl(app.url);
   if(!url){feedback.textContent=`${app.name}: Link has not been added yet. Please contact the portal administrator.`;return;}
   feedback.textContent='';
-  // Navigates in the same browser tab; clicking Back returns to the Portal.
-  window.location.assign(url);
+
+function openApp(app){
+  const url = validUrl(app.url);
+
+  if (!url) {
+    feedback.textContent =
+      `${app.name}: Link has not been added yet. Please contact the portal administrator.`;
+    return;
+  }
+
+  feedback.textContent = '';
+
+  // Open in a new browser tab.
+  window.open(url, '_blank', 'noopener,noreferrer');
 }
+
 function render(){
   feedback.textContent='';
   const term=search.value.trim().toLowerCase();
