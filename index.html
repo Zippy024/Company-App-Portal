@@ -1,36 +1,111 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="color-scheme" content="light" />
 <title>Company Application Portal</title>
 <style>
-:root{font-family:Segoe UI,Arial,sans-serif;color:#193947;background:#eef5fb}*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px}.shell{width:min(760px,100%);background:white;border:1px solid #dbe7f0;border-radius:20px;box-shadow:0 14px 45px #123b5814;overflow:hidden}.head{background:linear-gradient(115deg,#18599d,#3699b4);color:#fff;padding:28px 32px}.eyebrow{letter-spacing:.12em;font-weight:700;font-size:11px;opacity:.9}h1{margin:7px 0;font-size:28px}.head p{margin:0;color:#e4f5ff}.content{padding:28px 32px}.lead{font-weight:650;margin:0 0 12px}form{display:flex;gap:10px}input{flex:1;min-width:0;border:1px solid #c5d5e1;border-radius:10px;padding:15px;font-size:22px;letter-spacing:.13em}button{border:0;background:#216eb1;color:white;padding:0 26px;border-radius:10px;font-weight:700;cursor:pointer}button:hover{background:#14598e}.message{min-height:45px;padding:13px 0;color:#496474;font-size:13px}.list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.app{display:flex;gap:12px;align-items:center;padding:13px;border:1px solid #dfebf2;border-radius:10px;background:#f8fbfe}.code{font-weight:800;background:#e6f1fb;color:#1b619b;border-radius:7px;padding:9px 10px;font-variant-numeric:tabular-nums}.name{font-size:13px;font-weight:650}.note{font-size:12px;color:#698090;margin-top:18px}@media(max-width:550px){.content,.head{padding:22px}.list{grid-template-columns:1fr}h1{font-size:23px}button{padding:0 18px}}
+:root{--navy:#0c285d;--blue:#0b69c5;--line:#cbdcf4;--ink:#10295b;--muted:#506684;--canvas:#eef6ff;--pale:#f5f9ff;font-family:"Segoe UI",Arial,sans-serif}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:linear-gradient(145deg,#edf6ff,#e1efff);color:var(--ink);display:grid;place-items:center;padding:20px}
+.portal{width:min(1210px,100%);height:min(875px,calc(100dvh - 40px));min-height:460px;background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 22px 70px #2360a325;display:flex;flex-direction:column;border:1px solid #d5e5f7}
+.header{flex:none;padding:25px 39px 26px;color:#fff;background:linear-gradient(118deg,#1565ae 0%,#069de1 54%,#0b63c3 100%);position:relative;overflow:hidden}
+.header:after{content:"";position:absolute;width:70%;height:170px;right:-70px;bottom:-135px;border-radius:50%;background:#83d7ff24;pointer-events:none}
+.eyebrow{font-size:12px;font-weight:750;letter-spacing:1.1px}.heading{display:flex;align-items:center;gap:18px;margin-top:13px}
+.mark{display:grid;grid-template-columns:repeat(2,23px);grid-template-rows:repeat(2,23px);gap:5px;flex:none}.mark span{background:#c7e7fe;border-radius:6px}
+h1{margin:0;font-size:34px;line-height:1.15;letter-spacing:-.5px} .heading p{margin:7px 0 0;font-size:17px;color:#effaff}
+.content{padding:24px 36px 22px;min-height:0;display:flex;flex:1;flex-direction:column}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:16px;flex:none}
+h2{margin:0;font-size:24px;display:flex;align-items:center;gap:13px}
+.stacked{font-size:24px;color:#1466b9;line-height:1}
+.search{position:relative;width:min(365px,45%)}.search svg{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:#426999}
+.search input{width:100%;height:47px;border:1.5px solid #bed5f4;border-radius:30px;background:#fbfdff;padding:0 18px 0 48px;font:inherit;font-size:15px;color:var(--ink);outline:none}
+.search input:focus{border-color:#3488d7;box-shadow:0 0 0 3px #3488d71a}
+.list-window{min-height:0;flex:1;overflow-y:auto;overscroll-behavior:contain;border:1.5px solid var(--line);padding:10px;border-radius:17px;background:#fff;scrollbar-color:#82c3ff #f1f7ff;scrollbar-width:thin}
+.list-window::-webkit-scrollbar{width:10px}.list-window::-webkit-scrollbar-track{background:#f1f7ff;border-radius:10px}.list-window::-webkit-scrollbar-thumb{background:#83c1fa;border-radius:10px;border:2px solid #f1f7ff}
+.list{display:flex;flex-direction:column;gap:9px}.entry{border:1px solid #cddff7;border-radius:13px;background:linear-gradient(90deg,#f3f8ff,#f9fbff);padding:12px 18px;display:flex;align-items:center;gap:22px;min-height:77px}
+.num{background:#deedff;min-width:56px;height:47px;display:grid;place-items:center;border-radius:10px;font-weight:800;font-size:20px;color:#124c9d;font-variant-numeric:tabular-nums}
+.entry-copy{border-left:2px solid #a4c4ed;padding-left:22px;min-width:0;flex:1}.entry-title{font-size:18px;font-weight:750;line-height:1.3}.entry-description{font-size:14px;margin-top:3px;color:#344d71}
+.open{flex:none;background:#0564bd;border:0;border-radius:10px;color:#fff;font-size:15px;font-weight:700;min-height:44px;min-width:132px;cursor:pointer;display:inline-flex;justify-content:center;align-items:center;gap:10px;box-shadow:0 3px 9px #0064b31a}
+.open:hover{background:#084f9a}.open:focus-visible{outline:3px solid #75b6ff;outline-offset:2px}.open svg{width:17px;height:17px}
+.empty{padding:35px 15px;text-align:center;color:#61718b}.notice{flex:none;display:flex;align-items:center;gap:12px;margin-top:18px;padding:14px 18px;background:#f0f6ff;border-radius:13px;color:#233d6f;font-size:13px}.notice strong{color:#123a85}.notice .info{font-size:21px;font-weight:bold;color:#125fb4}.updated{margin-left:auto;white-space:nowrap;color:#486283}
+.feedback{color:#a94327;font-size:13px;min-height:0;line-height:1.35}.feedback:not(:empty){margin-top:8px}
+@media(max-width:700px){body{padding:0}.portal{height:100dvh;min-height:0;border-radius:0}.header{padding:23px}.content{padding:18px}.toolbar{align-items:stretch;flex-direction:column;gap:13px}h1{font-size:26px}h2{font-size:20px}.heading p{font-size:14px}.search{width:100%}.entry{gap:10px;padding:12px;min-height:74px}.num{min-width:42px;height:40px;font-size:16px}.entry-copy{padding-left:11px}.entry-title{font-size:14px}.entry-description{font-size:12px}.open{min-width:70px;font-size:13px;min-height:39px;gap:5px}.open svg{display:none}.notice{font-size:11px}.updated{display:none}}
 </style>
 </head>
 <body>
-<main class="shell">
-<header class="head"><div class="eyebrow">COMPANY INTERNAL APPLICATION DIRECTORY</div><h1>Application Portal</h1><p>Enter your application code to open a program</p></header>
-<section class="content"><p class="lead">Application Code</p><form id="goForm"><input id="codeInput" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="8" autocomplete="off" placeholder="e.g. 1001" required autofocus><button type="submit">Open</button></form><div class="message" id="message" role="status" aria-live="polite">Select a code from the directory below.</div><div class="list" id="appList"></div><p class="note">This is a portal prototype. Replace each blank URL in the APPS array with the real published app link before deploying. A public portal does not itself restrict access to HR systems.</p></section>
+<main class="portal">
+  <header class="header">
+    <div class="eyebrow">COMPANY INTERNAL APPLICATION DIRECTORY</div>
+    <div class="heading"><div class="mark" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+    <div><h1>Application Portal</h1><p>Company Applications – Click to open</p></div></div>
+  </header>
+  <section class="content" aria-label="Applications">
+    <div class="toolbar"><h2><span class="stacked" aria-hidden="true">▱</span> Application List</h2>
+      <label class="search"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/></svg><input id="search" type="search" placeholder="Search application..." aria-label="Search application" autocomplete="off" /></label>
+    </div>
+    <div class="list-window" id="scrollArea"><div class="list" id="appList"></div></div>
+    <div class="feedback" id="feedback" role="status" aria-live="polite"></div>
+    <footer class="notice"><span class="info" aria-hidden="true">ⓘ</span><strong>Notice:</strong><span>Please use your company account and follow each program's policy.</span><span class="updated">Company Application Portal</span></footer>
+  </section>
 </main>
 <script>
-// SETUP: Paste real published URLs into the url fields below.
-// Do not store passwords, tokens, or secret employee data in this file.
+/* ==========================================================
+  EDIT LINKS HERE ONLY. Add a new object for every new app.
+  - "url" must be the real HTTPS Published Appsmith / website URL.
+  - Leave url:'' if not linked yet; Open will show a message.
+  - Do not put passwords, API keys, or employee data here.
+  Example:
+  { name:'New Program', description:'Short description', url:'https://example.com' },
+========================================================== */
 const APPS = [
-  {code:'01', name:'TOFAS Test HR Version', url:'https://iida.appsmith.com/app/tofas/page1-6ab63d0d390253f7b72902f5?embed=true'},
-  {code:'02', name:'Kanji Level - 3', url:'https://forms.cloud.microsoft/r/uM1b3yxXek'},
-  {code:'03', name:'Driver Attendance', url:''},
-  {code:'04', name:'PIT Management', url:''}
+  { name:'TOFAS Test Program',       description:'Practice / HR Test / Official Test', url:'' },
+  { name:'TOFAS HR Answer Review',   description:'Check Answers & Details',            url:'' },
+  { name:'Driver Attendance',        description:'Daily In/Out & OT Approval',         url:'' },
+  { name:'PIT Management',           description:'Payroll PIT & WHT Calculation',      url:'' }
 ];
-const input=document.getElementById('codeInput');
-const msg=document.getElementById('message');
-const list=document.getElementById('appList');
-APPS.forEach(a=>{const el=document.createElement('div');el.className='app';const code=document.createElement('span');code.className='code';code.textContent=a.code;const name=document.createElement('span');name.className='name';name.textContent=a.name;el.append(code,name);list.append(el);});
-document.getElementById('goForm').addEventListener('submit',e=>{
- e.preventDefault();const code=input.value.trim();const app=APPS.find(a=>a.code===code);
- if(!app){msg.textContent='Application code not found. Please check the code.';return;}
- if(!/^https:\/\//i.test(app.url)){msg.textContent=app.name+' is not configured yet. Ask your administrator to add its published URL.';return;}
- const url=new URL(app.url);window.location.assign(url.href);
-});
+
+const list = document.getElementById('appList');
+const search = document.getElementById('search');
+const scrollArea = document.getElementById('scrollArea');
+const feedback = document.getElementById('feedback');
+function validUrl(raw){
+  if(typeof raw !== 'string' || !raw.trim())return null;
+  try{const parsed = new URL(raw.trim());return parsed.protocol === 'https:' ? parsed.href : null;}catch{return null;}
+}
+function openApp(app){
+  const url=validUrl(app.url);
+  if(!url){feedback.textContent=`${app.name}: Link has not been added yet. Please contact the portal administrator.`;return;}
+  feedback.textContent='';
+  // Navigates in the same browser tab; clicking Back returns to the Portal.
+  window.location.assign(url);
+}
+function render(){
+  feedback.textContent='';
+  const term=search.value.trim().toLowerCase();
+  list.replaceChildren();
+  let count=0;
+  APPS.forEach((app,i)=>{
+    if(!`${app.name} ${app.description||''}`.toLowerCase().includes(term))return;
+    count++;
+    const row=document.createElement('article');row.className='entry';
+    const number=document.createElement('span');number.className='num';number.textContent=String(i+1).padStart(2,'0');
+    const details=document.createElement('div');details.className='entry-copy';
+    const title=document.createElement('div');title.className='entry-title';title.textContent=app.name;
+    const description=document.createElement('div');description.className='entry-description';description.textContent=app.description||'';
+    details.append(title,description);
+    const button=document.createElement('button');button.className='open';button.type='button';button.setAttribute('aria-label',`Open ${app.name}`);
+    button.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 5h6v6"/><path d="M19 5 10 14"/><path d="M19 13v6H5V5h6"/></svg><span>Open</span>';
+    button.addEventListener('click',()=>openApp(app));
+    row.append(number,details,button);list.append(row);
+  });
+  if(count===0){const none=document.createElement('div');none.className='empty';none.textContent='No matching applications found.';list.append(none);}
+  scrollArea.scrollTop=0;
+}
+search.addEventListener('input',render);
+render();
 </script>
 </body>
 </html>
